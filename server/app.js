@@ -1,9 +1,11 @@
 import express from 'express';
-import 'dotenv/config';
 import session from 'express-session';
 import connection from './database/connection.js'
 import fs from 'fs';
 import userRoutes from './routers/users.js';
+import authRouter from './routers/authRouter.js';
+import { setupMailer } from "./mail/mailer.js";
+import 'dotenv/config';
 
 const app = express();
 
@@ -13,7 +15,7 @@ app.use('/users', userRoutes);
 
 // Konfigurer express-session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'enhemmeligstreng', // Her konfigureres secret optionen korrekt
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -22,6 +24,10 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24
   }
 }));
+
+await setupMailer();
+
+app.use(authRouter);
 
 const schema = fs.readFileSync('./database/schema.sql', 'utf8');
 
