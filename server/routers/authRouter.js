@@ -88,4 +88,13 @@ authRouter.post("/logout", (req, res) => {
     });
 });
 
+// Admin check
+authRouter.get("/admin-only", (req, res) => {
+    if (req.session.user?.role === "admin") {
+        return res.send({ message: "Welcome, admin!" });
+    } else {
+        return res.status(403).send({ error: "Admins only!" });
+    }
+});
+
 export default authRouter;

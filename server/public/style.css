@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+nav {
+  margin-bottom: 1em;
+}
+nav a {
+  margin-right: 10px;
+}
+input {
+  display: block;
+  margin: 10px 0;
+}
+.hidden {
+  display: none;
+}

@@ -6,6 +6,7 @@ import userRoutes from './routers/users.js';
 import authRouter from './routers/authRouter.js';
 import { setupMailer } from "./mail/mailer.js";
 import 'dotenv/config';
+import meRouter from './routers/meRouter.js';
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use(session({
 await setupMailer();
 
 app.use(authRouter);
+
+app.use(meRouter);
 
 const schema = fs.readFileSync('./database/schema.sql', 'utf8');
 
