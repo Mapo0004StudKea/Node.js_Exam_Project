@@ -76,6 +76,24 @@ async function login() {
   }
 }
 
+async function logout() {
+  await fetch('/logout', {
+    method: 'POST',
+    credentials: 'include'
+  });
+  alert("Logged out");
+  location.hash = '/';
+}
+
+function stringToColor(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const color = `hsl(${hash % 360}, 70%, 60%)`; // HSL-farve baseret på hash
+  return color;
+}
+
 async function checkSession() {
   const msg = document.getElementById('dashboard-msg');
 
@@ -92,53 +110,54 @@ async function checkSession() {
   }
 }
 
-async function logout() {
-  await fetch('/logout', {
-    method: 'POST',
-    credentials: 'include'
-  });
-  alert("Logged out");
-  location.hash = '/';
-}
-
-// Socket.io (valgfrit)
+// Socket.io
 const socket = io();
 
 // Når dashboard er synligt, sæt chat op
+let chatInitialized = false;
+
 function initChat() {
+  if (chatInitialized) return;
+  chatInitialized = true;
+
   const form = document.getElementById('chat-form');
   const input = document.getElementById('chat-input');
   const messages = document.getElementById('messages');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (input.value) {
-      socket.emit('chat message', input.value);
+    if (input.value && currentUser) {
+      socket.emit('chat message', {
+        user: currentUser,
+        text: input.value
+      });
       input.value = '';
     }
   });
 
   socket.on('chat message', (msg) => {
     const li = document.createElement('li');
-    li.textContent = msg;
+    const usernameColor = stringToColor(msg.user);
+
+    li.innerHTML = `<strong style="color:${usernameColor}">${msg.user}:</strong> ${msg.text}`;
     messages.appendChild(li);
     messages.scrollTop = messages.scrollHeight;
   });
 }
 
-// Tilføj kald til initChat når vi er på dashboard
+// Tilføj kald til initChat når man er på dashboard
+let currentUser = null;
+
 async function checkSession() {
   const msg = document.getElementById('dashboard-msg');
-  const res = await fetch('/me', {
-    credentials: 'include'
-  });
+  const res = await fetch('/me', { credentials: 'include' });
 
   if (res.ok) {
     const data = await res.json();
-    msg.textContent = `Welcome, ${data.data.username}`;
+    currentUser = data.data.username;
+    msg.textContent = `Welcome, ${currentUser}`;
     document.getElementById('logout-btn').style.display = 'inline';
 
-    // Initialiser chat først når vi er logget ind
     initChat();
   } else {
     location.hash = '/login';

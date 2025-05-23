@@ -91,9 +91,8 @@ footer {
   margin-bottom: 0.5rem;
 }
 
-#messages li {
-  padding: 0.3rem;
-  border-bottom: 1px solid #eee;
+#messages li strong {
+  margin-right: 0.5rem;
 }
 
 #chat-input {
