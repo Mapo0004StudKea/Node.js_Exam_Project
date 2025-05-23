@@ -1,29 +1,41 @@
-const views = {
-  '/': document.getElementById('view-home'),
-  '/about': document.getElementById('view-about'),
-  '/login': document.getElementById('view-login'),
-  '/signup': document.getElementById('view-signup'),
-  '/dashboard': document.getElementById('view-dashboard'),
-};
+// Indlæs header og footer først, så siden kan vises bagefter
+Promise.all([
+  fetch("header.html").then(res => res.text()).then(html => {
+    document.getElementById("header-container").innerHTML = html;
+  }),
+  fetch("footer.html").then(res => res.text()).then(html => {
+    document.getElementById("footer-container").innerHTML = html;
+  })
+]).then(() => {
+  // Når header og footer er indlæst, kan views tilgås
+  const views = {
+    '/': document.getElementById('view-home'),
+    '/about': document.getElementById('view-about'),
+    '/login': document.getElementById('view-login'),
+    '/signup': document.getElementById('view-signup'),
+    '/dashboard': document.getElementById('view-dashboard'),
+  };
 
-function showRoute(route) {
-  Object.values(views).forEach(v => v.classList.add('hidden'));
-  const view = views[route] || views['/'];
-  view.classList.remove('hidden');
+  function showRoute(route) {
+    Object.values(views).forEach(v => v.classList.add('hidden'));
+    const view = views[route] || views['/'];
+    view.classList.remove('hidden');
 
-  if (route === '/dashboard') {
-    checkSession();
+    if (route === '/dashboard') {
+      checkSession();
+    }
   }
-}
 
-window.addEventListener('hashchange', () => {
-  showRoute(location.hash.slice(1) || '/');
+  window.addEventListener('hashchange', () => {
+    showRoute(location.hash.slice(1) || '/');
+  });
+
+  window.addEventListener('load', () => {
+    showRoute(location.hash.slice(1) || '/');
+  });
 });
 
-window.addEventListener('load', () => {
-  showRoute(location.hash.slice(1) || '/');
-});
-
+// Auth functions
 async function signup() {
   const username = document.getElementById('signup-username').value;
   const email = document.getElementById('signup-email').value;
@@ -88,3 +100,10 @@ async function logout() {
   alert("Logged out");
   location.hash = '/';
 }
+
+// Socket.io (valgfrit)
+const socket = io();
+socket.emit("chat message", "Hej server!");
+socket.on("chat message", (msg) => {
+  console.log("Modtaget besked:", msg);
+});

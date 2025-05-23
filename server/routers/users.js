@@ -5,7 +5,7 @@ import connection from '../database/connection.js';
 const router = express.Router();
 
 // Create
-router.post('/', async (req, res) => {
+router.post('/users/', async (req, res) => {
     try {
         const { username, email, password, roles } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,16 +22,16 @@ router.post('/', async (req, res) => {
 });
 
 // Read all
-router.get('/', (req, res) => {
-    connection.query('SELECT id, username, email, roles, created_at FROM users', (err, results) => {
+router.get('/users/', (req, res) => {
+    connection.query('SELECT id, username, email, password, roles, created_at FROM users', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
 });
 
 // Read one
-router.get('/:id', (req, res) => {
-    connection.query('SELECT id, username, email, roles, created_at FROM users WHERE id = ?', [req.params.id], (err, results) => {
+router.get('/users/:id', (req, res) => {
+    connection.query('SELECT id, username, email, password, roles, created_at FROM users WHERE id = ?', [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     if (results.length === 0) return res.status(404).json({ message: 'User not found' });
         res.json(results[0]);
@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Update
-router.patch('/:id', async (req, res) => {
+router.patch('/users/:id', async (req, res) => {
     try {
         const { username, email, password, roles } = req.body;
 
@@ -57,7 +57,7 @@ router.patch('/:id', async (req, res) => {
 });
 
 // Delete
-router.delete('/:id', (req, res) => {
+router.delete('//users:id', (req, res) => {
     connection.query('DELETE FROM users WHERE id = ?', [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'User deleted' });

@@ -39,6 +39,6 @@ export async function sendLoginEmail(toEmail, username) {
     html: `<p><b>Hi ${username}</b>, you just logged in!</p>`,
   });
 
-  console.log("Message sent:", info.messageId);
+  // console.log("Message sent:", info.messageId);
   console.log("Preview URL:", nodemailer.getTestMessageUrl(info));
 }
