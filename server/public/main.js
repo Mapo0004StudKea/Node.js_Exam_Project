@@ -13,7 +13,7 @@ Promise.all([
     '/about': document.getElementById('view-about'),
     '/login': document.getElementById('view-login'),
     '/signup': document.getElementById('view-signup'),
-    '/dashboard': document.getElementById('view-dashboard'),
+    '/dashboard': document.getElementById('view-dashboard')
   };
 
   function showRoute(route) {
@@ -103,7 +103,44 @@ async function logout() {
 
 // Socket.io (valgfrit)
 const socket = io();
-socket.emit("chat message", "Hej server!");
-socket.on("chat message", (msg) => {
-  console.log("Modtaget besked:", msg);
-});
+
+// Når dashboard er synligt, sæt chat op
+function initChat() {
+  const form = document.getElementById('chat-form');
+  const input = document.getElementById('chat-input');
+  const messages = document.getElementById('messages');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value) {
+      socket.emit('chat message', input.value);
+      input.value = '';
+    }
+  });
+
+  socket.on('chat message', (msg) => {
+    const li = document.createElement('li');
+    li.textContent = msg;
+    messages.appendChild(li);
+    messages.scrollTop = messages.scrollHeight;
+  });
+}
+
+// Tilføj kald til initChat når vi er på dashboard
+async function checkSession() {
+  const msg = document.getElementById('dashboard-msg');
+  const res = await fetch('/me', {
+    credentials: 'include'
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    msg.textContent = `Welcome, ${data.data.username}`;
+    document.getElementById('logout-btn').style.display = 'inline';
+
+    // Initialiser chat først når vi er logget ind
+    initChat();
+  } else {
+    location.hash = '/login';
+  }
+}
