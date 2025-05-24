@@ -1,9 +1,9 @@
 // Indlæs header og footer først, så siden kan vises bagefter
 Promise.all([
-  fetch("header.html").then(res => res.text()).then(html => {
+  fetch("header.html").then(res => {return res.text()}).then(html => {
     document.getElementById("header-container").innerHTML = html;
   }),
-  fetch("footer.html").then(res => res.text()).then(html => {
+  fetch("footer.html").then(res => {return res.text()}).then(html => {
     document.getElementById("footer-container").innerHTML = html;
   })
 ]).then(() => {
@@ -28,7 +28,7 @@ Promise.all([
     };
 
   function showRoute(route) {
-    Object.values(views).forEach(v => v.classList.add('hidden'));
+    Object.values(views).forEach(v => {return v.classList.add('hidden')});
     const view = views[route] || views['/'];
     view.classList.remove('hidden');
 
