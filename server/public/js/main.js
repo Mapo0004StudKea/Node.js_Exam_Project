@@ -61,10 +61,10 @@ async function signup() {
 
   const data = await res.json();
   if (res.ok) {
-    toastr.success("Bruger oprettet! Du kan nu logge ind."); // Bruges toastr.success
-    location.hash = '/login'; // Omdiriger til login efter signup
+    toastr.success("Bruger oprettet! Du kan nu logge ind."); 
+    location.hash = '/login'; 
   } else {
-    toastr.error(data.error || 'Signup mislykkedes.'); // Bruges toastr.error
+    toastr.error(data.error || 'Signup mislykkedes.'); 
   }
 }
 
@@ -81,10 +81,10 @@ async function login() {
 
   const data = await res.json();
   if (res.ok) {
-    toastr.success("Du er logget ind!"); // Bruges toastr.success
+    toastr.success("Du er logget ind!"); 
     location.hash = '/dashboard';
   } else {
-    toastr.error(data.error || 'Login mislykkedes.'); // Bruges toastr.error
+    toastr.error(data.error || 'Login mislykkedes.'); 
   }
 }
 
@@ -93,7 +93,7 @@ async function logout() {
     method: 'POST',
     credentials: 'include'
   });
-  toastr.info("Du er logget ud."); // Bruges toastr.info
+  toastr.info("Du er logget ud."); 
   location.hash = '/';
 }
 
@@ -102,8 +102,7 @@ function stringToColor(str) {
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const color = `hsl(${hash % 360}, 70%, 60%)`; // HSL-farve baseret på hash
-  return color;
+  const color = `hsl(${hash % 360}, 70%, 60%)`; 
 }
 
 async function checkSession() {
@@ -118,7 +117,7 @@ async function checkSession() {
     currentUser = data.data.username;
     msg.textContent = `Velkommen, ${currentUser}`;
     document.getElementById('logout-btn').style.display = 'inline';
-    initChat(); // Sørg for at chatten initialiseres, når sessionen er aktiv
+    initChat(); 
   } else {
     // Hvis sessionen ikke er gyldig, omdiriger til login og vis en fejlmeddelelse
     toastr.warning("Din session er udløbet eller du er ikke logget ind.");
@@ -161,4 +160,4 @@ function initChat() {
   });
 }
 
-let currentUser = null; // Definer currentUser globalt for at være tilgængelig i initChat
+let currentUser = null; 
