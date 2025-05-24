@@ -16,6 +16,17 @@ Promise.all([
     '/dashboard': document.getElementById('view-dashboard')
   };
 
+  toastr.options = {
+    "positionClass": "toast-bottom-left",
+    "closeButton": true,
+    "progressBar": true,
+    "newestOnTop": false,
+    "preventDuplicates": false, 
+    "showDuration": "300", 
+    "hideDuration": "1000", 
+    "timeOut": "5000"
+    };
+
   function showRoute(route) {
     Object.values(views).forEach(v => v.classList.add('hidden'));
     const view = views[route] || views['/'];
@@ -50,10 +61,10 @@ async function signup() {
 
   const data = await res.json();
   if (res.ok) {
-    alert("Signup successful");
-    location.hash = '/dashboard';
+    toastr.success("Bruger oprettet! Du kan nu logge ind."); // Bruges toastr.success
+    location.hash = '/login'; // Omdiriger til login efter signup
   } else {
-    alert(data.error || 'Signup failed');
+    toastr.error(data.error || 'Signup mislykkedes.'); // Bruges toastr.error
   }
 }
 
@@ -70,9 +81,10 @@ async function login() {
 
   const data = await res.json();
   if (res.ok) {
+    toastr.success("Du er logget ind!"); // Bruges toastr.success
     location.hash = '/dashboard';
   } else {
-    alert(data.error || 'Login failed');
+    toastr.error(data.error || 'Login mislykkedes.'); // Bruges toastr.error
   }
 }
 
@@ -81,7 +93,7 @@ async function logout() {
     method: 'POST',
     credentials: 'include'
   });
-  alert("Logged out");
+  toastr.info("Du er logget ud."); // Bruges toastr.info
   location.hash = '/';
 }
 
@@ -103,9 +115,13 @@ async function checkSession() {
 
   if (res.ok) {
     const data = await res.json();
-    msg.textContent = `Welcome, ${data.data.username}`;
+    currentUser = data.data.username;
+    msg.textContent = `Velkommen, ${currentUser}`;
     document.getElementById('logout-btn').style.display = 'inline';
+    initChat(); // Sørg for at chatten initialiseres, når sessionen er aktiv
   } else {
+    // Hvis sessionen ikke er gyldig, omdiriger til login og vis en fejlmeddelelse
+    toastr.warning("Din session er udløbet eller du er ikke logget ind.");
     location.hash = '/login';
   }
 }
@@ -145,21 +161,4 @@ function initChat() {
   });
 }
 
-// Tilføj kald til initChat når man er på dashboard
-let currentUser = null;
-
-async function checkSession() {
-  const msg = document.getElementById('dashboard-msg');
-  const res = await fetch('/me', { credentials: 'include' });
-
-  if (res.ok) {
-    const data = await res.json();
-    currentUser = data.data.username;
-    msg.textContent = `Welcome, ${currentUser}`;
-    document.getElementById('logout-btn').style.display = 'inline';
-
-    initChat();
-  } else {
-    location.hash = '/login';
-  }
-}
+let currentUser = null; // Definer currentUser globalt for at være tilgængelig i initChat
