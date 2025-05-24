@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255),
     roles VARCHAR(255) DEFAULT "user",
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);

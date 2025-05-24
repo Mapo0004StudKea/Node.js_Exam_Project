@@ -100,3 +100,7 @@ footer {
   padding: 0.5rem;
 }
 
+.center-container {
+  display: flex;
+  justify-content: center;
+}
