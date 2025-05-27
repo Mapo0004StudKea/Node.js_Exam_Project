@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SPA Auth</title>
+  <title>SPA Exam Project</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/ico" href="/images/favicon.ico" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -10,8 +10,16 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
-  <div id="header-container"></div>
-
+  <header>
+    <div class="logo">SPA Exam Project</div>
+    <nav>
+      <a href="#/">Home</a>
+      <a href="#/about">About</a>
+      <a href="#/dashboard">Dashboard</a>
+      <a href="#/login">Sign In</a>
+      <a href="#/signup">Sign Up</a>
+    </nav>
+  </header>
   <main>
     <!-- Views -->
     <section id="view-home" class="view"> <h1>Welcome to Home</h1> </section>
@@ -23,7 +31,7 @@
 
     <section id="view-dashboard" class="view hidden">
       <h2 id="dashboard-msg">Loading...</h2>
-      <button class="btn-gray" id="logout-btn" onclick="logout()">Logout</button>
+      <button class="btn-orange" id="logout-btn">Logout</button>
 
       <div id="chat-container">
         <h3>Live Chat</h3>
@@ -40,7 +48,7 @@
       <h2>Sign In</h2>
       <input id="login-username" placeholder="Username" />
       <input id="login-password" type="password" placeholder="Password" />
-      <button class="btn-orange" onclick="login()">Login</button>
+      <button class="btn-orange" id="login-btn">Login</button>
     </section>
 
     <section id="view-signup" class="view hidden">
@@ -48,13 +56,17 @@
       <input id="signup-username" placeholder="Username" />
       <input id="signup-email" placeholder="Email" />
       <input id="signup-password" type="password" placeholder="Password" />
-      <button class="btn-orange" onclick="signup()">Signup</button>
+      <button class="btn-orange" id="signup-btn">signup</button>
     </section>
-</div>
+  </div>
 
-  <div id="footer-container"></div>
+  
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
+
+  <footer>
+    <p>© 2025 SPA Exam Project</p>
+  </footer>
 </body>
 </html>
