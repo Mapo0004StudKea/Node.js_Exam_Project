@@ -1,0 +1,57 @@
+/* Light Mode Styles */
+body.light-mode {
+    background-color: #f9f9f9; 
+    color: #333;
+}
+
+body.light-mode header {
+    background-color: #eee;
+    border-bottom-color: #ccc;
+}
+
+body.light-mode nav a {
+    color: #333;
+}
+
+body.light-mode nav a:hover {
+    color: #007bff;
+}
+
+body.light-mode input {
+    background-color: #fff;
+    border-color: #ccc;
+    color: #333;
+}
+
+body.light-mode button {
+    /* Specifik styling for knapper kan være her, hvis nødvendigt */
+}
+
+body.light-mode .btn-orange {
+    background-color: orange;
+    color: black;
+}
+
+body.light-mode .btn-gray {
+    background-color: #aaa;
+    color: black;
+}
+
+body.light-mode footer {
+    background-color: #eee;
+    color: #666;
+    border-top-color: #ccc;
+}
+
+body.light-mode #chat-container {
+    border-top-color: #bbb;
+}
+
+body.light-mode #messages {
+    border-color: #ccc;
+    background-color: #fff;
+}
+
+body.light-mode .theme-toggle-button {
+    color: #333;
+}

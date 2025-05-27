@@ -1,0 +1,44 @@
+header {
+    background-color: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2em;
+    border-bottom: 2px solid #333;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.logo {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: orange;
+}
+
+nav a {
+    margin-left: 20px;
+    color: #f1f1f1;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+nav a:hover {
+    color: orange;
+}
+
+main {
+    padding: 2em;
+}
+
+footer {
+    background-color: #111;
+    color: #888;
+    text-align: center;
+    padding: 1em;
+    margin-top: 4em;
+    border-top: 2px solid #333;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+}
