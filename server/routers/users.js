@@ -42,22 +42,47 @@ router.get('/users/:id', (req, res) => {
 router.patch('/users/:id', async (req, res) => {
     try {
         const { username, email, password, roles } = req.body;
+        const userId = req.params.id;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        let updateFields = [];
+        let updateValues = [];
 
-        const query = 'UPDATE users SET username = ?, email = ?, password = ?, roles = ? WHERE id = ?';
-        connection.query(query, [username, email, hashedPassword, roles, req.params.id], (err) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (username !== undefined) {
+            updateFields.push('username = ?');
+            updateValues.push(username);
+        }
+        if (email !== undefined) {
+            updateFields.push('email = ?');
+            updateValues.push(email);
+        }
+        if (roles !== undefined) {
+            updateFields.push('roles = ?');
+            updateValues.push(roles);
+        }
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateFields.push('password = ?');
+            updateValues.push(hashedPassword);
+        }
+
+        if (updateFields.length === 0) {
+            return res.status(400).json({ message: 'No fields to update' });
+        }
+
+        const query = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
+        connection.query(query, [...updateValues, userId], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
             res.json({ message: 'User updated' });
         });
 
-    } catch {
-        res.status(500).json({ error: 'Failed to hash password' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to update user or hash password' });
     }
 });
 
 // Delete
-router.delete('//users:id', (req, res) => {
+router.delete('/users/:id', (req, res) => {
     connection.query('DELETE FROM users WHERE id = ?', [req.params.id], (err) => {
     if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'User deleted' });

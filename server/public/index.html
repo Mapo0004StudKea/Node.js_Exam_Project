@@ -16,32 +16,71 @@
             <a href="#/">Home</a>
             <a href="#/about">About</a>
             <a href="#/dashboard">Dashboard</a>
-            <a href="#/login">Sign In</a>
+            <a href="#/admin">Admin</a> <a href="#/login">Sign In</a>
             <a href="#/signup">Sign Up</a>
             <button id="theme-toggle" class="theme-toggle-button">🌙</button>
         </nav>
     </header>
     <main>
-        <section id="view-home" class="view"> <h1>Welcome to Home</h1> </section>
+    <section id="view-home" class="view"> <h1>Welcome to Home</h1> </section>
 
-        <section id="view-about" class="view hidden">
-            <h1>About this project</h1>
-            <p>SPA with Vanilla JS auth.</p>
-        </section>
+    <section id="view-about" class="view hidden">
+        <h1>About this project</h1>
+        <p>SPA with Vanilla JS auth.</p>
+    </section>
 
-        <section id="view-dashboard" class="view hidden">
-            <h2 id="dashboard-msg">Loading...</h2>
-            <button class="btn-orange" id="logout-btn">Logout</button>
+    <section id="view-dashboard" class="view hidden">
+        <h2 id="dashboard-msg">Loading...</h2>
+        <button class="btn-orange" id="logout-btn">Logout</button>
 
-            <div id="chat-container">
-                <h3>Live Chat</h3>
-                <ul id="messages"></ul>
-                <form id="chat-form">
-                    <input id="chat-input" autocomplete="off" placeholder="Skriv en besked..." />
-                    <button class="btn-orange">Send</button>
-                </form>
-            </div>
-        </section>
+        <div id="chat-container">
+            <h3>Live Chat</h3>
+            <ul id="messages"></ul>
+            <form id="chat-form">
+                <input id="chat-input" autocomplete="off" placeholder="Skriv en besked..." />
+                <button class="btn-orange">Send</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="view-admin" class="view hidden">
+        <h1>User Administration</h1>
+        <h2>User List</h2>
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Roles</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <h2>Create New User</h2>
+        <div class="user-form-container">
+            <input type="text" id="admin-create-username" placeholder="Username" />
+            <input type="email" id="admin-create-email" placeholder="Email" />
+            <input type="password" id="admin-create-password" placeholder="Password" />
+            <input type="text" id="admin-create-roles" placeholder="Roles (e.g., user, admin)" value="user" />
+            <button class="btn-orange" id="admin-create-btn">Create User</button>
+        </div>
+
+        <h2>Edit User</h2>
+        <div class="user-form-container">
+            <input type="text" id="admin-edit-id" placeholder="User ID to Edit" />
+            <input type="text" id="admin-edit-username" placeholder="New Username" />
+            <input type="email" id="admin-edit-email" placeholder="New Email" />
+            <input type="password" id="admin-edit-password" placeholder="New Password (leave blank to keep current)" />
+            <input type="text" id="admin-edit-roles" placeholder="New Roles (e.g., user, admin)" />
+            <button class="btn-orange" id="admin-load-user-btn">Load User</button>
+            <button class="btn-orange" id="admin-edit-btn">Save Changes</button>
+        </div>
+    </section>
 
     <div class="center-container">
         <section id="view-login" class="view hidden">
@@ -63,8 +102,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/theme.js"></script>
-
-    <footer>
+    <script type="module" src="js/admin.js"></script> <footer>
         <p>© 2025 SPA Exam Project</p>
     </footer>
 </body>
