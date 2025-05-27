@@ -170,10 +170,6 @@ saveButton.addEventListener('click', async () => {
 
 // Funktion til at slette en bruger
 async function deleteUser(id) {
-    if (!confirm(`Are you sure you want to delete user with ID: ${id}?`)) {
-        return;
-    }
-
     try {
         const response = await fetch(`/users/${id}`, {
             method: 'DELETE',
