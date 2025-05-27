@@ -16,7 +16,7 @@ router.post('/users/', async (req, res) => {
             res.status(201).json({ id: results.insertId, message: 'User created' });
         });
 
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: 'Failed to hash password' });
     }
 });
@@ -46,19 +46,19 @@ router.patch('/users/:id', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const query = 'UPDATE users SET username = ?, email = ?, password = ?, roles = ? WHERE id = ?';
-        connection.query(query, [username, email, hashedPassword, roles, req.params.id], (err, results) => {
+        connection.query(query, [username, email, hashedPassword, roles, req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err.message });
             res.json({ message: 'User updated' });
         });
 
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: 'Failed to hash password' });
     }
 });
 
 // Delete
 router.delete('//users:id', (req, res) => {
-    connection.query('DELETE FROM users WHERE id = ?', [req.params.id], (err, results) => {
+    connection.query('DELETE FROM users WHERE id = ?', [req.params.id], (err) => {
     if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'User deleted' });
     });
