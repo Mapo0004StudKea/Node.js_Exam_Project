@@ -7,7 +7,7 @@ export const views = {
     '/login': document.getElementById('view-login'),
     '/signup': document.getElementById('view-signup'),
     '/dashboard': document.getElementById('view-dashboard'),
-    '/admin': document.getElementById('view-admin') 
+    '/admin': document.getElementById('view-admin')
 };
 
 export function showRoute(route) {

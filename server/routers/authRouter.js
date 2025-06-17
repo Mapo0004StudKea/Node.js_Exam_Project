@@ -5,87 +5,92 @@ import connection from "../database/connection.js";
 
 const authRouter = Router();
 
-// Helper to make db.query async-friendly
-function query(sql, values) {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, values, (err, results) => {
-            if (err) return reject(err);
-            resolve(results);
-        });
-    });
-}
-
 // SIGNUP
 authRouter.post("/signup", async (req, res) => {
-    const { username, email, password } = req.body;
+  const { username, email, password } = req.body;
 
-    try {
-        const existing = await query("SELECT * FROM users WHERE username = ? OR email = ?", [username, email]);
-        if (existing.length > 0) {
-            return res.status(400).send({ error: "Username or email already taken" });
-        }
+  try {
+    const [existing] = await connection.query(
+      "SELECT * FROM users WHERE username = ? OR email = ?",
+      [username, email]
+    );
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword]);
-
-        const [user] = await query("SELECT * FROM users WHERE username = ?", [username]);
-
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            role: user.roles,
-        };
-
-        await sendSignUpEmail(user.email, user.username);
-
-        res.send({ message: "Signup successful", user: req.session.user });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: "Something went wrong" });
+    if (existing.length > 0) {
+      return res.status(400).send({ error: "Username or email already taken" });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await connection.query(
+      "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+      [username, email, hashedPassword]
+    );
+
+    const [results] = await connection.query(
+      "SELECT * FROM users WHERE username = ?",
+      [username]
+    );
+
+    const user = results[0];
+
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      role: user.roles,
+    };
+
+    await sendSignUpEmail(user.email, user.username);
+
+    res.send({ message: "Signup successful", user: req.session.user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Something went wrong" });
+  }
 });
 
 // LOGIN
 authRouter.post("/login", async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    try {
-        const [user] = await query("SELECT * FROM users WHERE username = ? OR email = ?", [username, username]);
+  try {
+    const [results] = await connection.query(
+      "SELECT * FROM users WHERE username = ? OR email = ?",
+      [username, username]
+    );
 
-        if (!user) {
-            return res.status(400).send({ error: "Invalid credentials" });
-        }
+    const user = results[0];
 
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            return res.status(400).send({ error: "Invalid credentials" });
-        }
-
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            role: user.roles,
-        };
-
-        await sendLoginEmail(user.email, user.username);
-
-        res.send({ message: "Login successful", user: req.session.user });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: "Something went wrong" });
+    if (!user) {
+      return res.status(400).send({ error: "Invalid credentials" });
     }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).send({ error: "Invalid credentials" });
+    }
+
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      role: user.roles,
+    };
+
+    await sendLoginEmail(user.email, user.username);
+
+    res.send({ message: "Login successful", user: req.session.user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Something went wrong" });
+  }
 });
 
 // LOGOUT
 authRouter.post("/logout", (req, res) => {
-    req.session.destroy((err) => {
-        if (err) return res.status(500).send({ error: "Logout failed" });
-        res.clearCookie("connect.sid");
-        res.send({ message: "Logged out successfully" });
-    });
+  req.session.destroy((err) => {
+    if (err) return res.status(500).send({ error: "Logout failed" });
+    res.clearCookie("connect.sid");
+    res.send({ message: "Logged out successfully" });
+  });
 });
 
 // Admin check
