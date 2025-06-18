@@ -14,15 +14,114 @@
         <div class="logo">Exam Project</div>
         <nav>
             <a href="#/">Home</a>
-            <a href="#/anime">Anime</a>
+            <a href="#/about">About</a>
             <a href="#/dashboard">Dashboard</a>
+            <a href="#/anime">Anime</a>
             <a href="#/admin">Admin</a> <a href="#/login">Sign In</a>
             <a href="#/signup">Sign Up</a>
             <button id="theme-toggle" class="theme-toggle-button">🌙</button>
         </nav>
     </header>
     <main>
-    <section id="view-home" class="view"> <h1>Welcome to Home</h1> </section>
+    <section id="view-home" class="view"> 
+        <h1>Exam Requirements for Full Stack Node.js</h1>
+        <p><b>Type:</b> Both individual and group work is allowed. You still need to understand all the code. Collaborations across electives are also allowed.</p>
+        <p><b>Deadline:</b> Check Wiseflow for when the hand-in deadline is. You must submit a full stack project by then but you can still work on your project up until the exam. You will only be evaluated based on the final project. Upload a Git link to your project (PDF) or the code as a zip file (requires an empty PDF first).</p>
+        <p><b>Scope:</b> There should be enough features that you can talk incessantly for 5-6 minutes while showcasing your product.</p>
+        <p>Auth is a requirement and you are free to reuse everything from Mandatory II.</p>
+        <p>You are not allowed to reuse Mandatory I.</p>
+
+
+        <h2>Hard requirements</h2>
+        <p>These are the minimum requirement. The project must contain these elements:</p>
+
+        <p><b>Backend</b></p>
+        <ul>
+            <li>Use Express</li>
+            <li>Use a database (You need access to your database through the terminal and be able to write your own queries to it during the exam). Choose the appropriate database for your project. You are expected to research and make an informed choice.</li>
+            <li>Use Sockets.</li>
+            <li>Have authentication and authorization.</li>
+        </ul>
+        <p><b>Frontend</b></p>
+        <ul>
+            <li>Plain HTML, template engines or Svelte (/kit) are okay.</li>
+            <li>Use Fetch.</li>
+            <li>Use Sockets.</li>
+            <li>Have authentication and authorization.</li>
+        </ul>
+        <p><b>Soft requirements (You must also fulfill these too):</b></p>
+        <ul>
+            <li>You must have a clean code base and your code style should be consistent.</li>
+            <li>You must make an attempt at styling your website. Styling frameworks can be used. User experience is important too.</li>
+        </ul>
+        <p><b>Optional:</b></p>
+        <ul>
+            <li>Host your application.</li>
+        </ul>
+        <p><b>Production ready (hard requirement):</b></p>
+        <p>Whether the project is hosted or not the project must be production ready which means that:</p>
+        <ul>
+            <li>the code shouldn’t be littered with console logs, unused code, unfinished snippets etc.</li>
+            <li>the website should be legal by conforming to GDPR.</li>
+        </ul><br>
+        <h1>Exam</h1>
+        <p>Language: Danish</p>
+        <p>Be prepared: The project should be up and running.</p>
+        <p>Editor: Dark mode is fine but either:</p>
+        <ul>
+            <p>Connect your computer to a projector in the classroom to set the proper size ahead of the exam.</p>
+            <p>Or learn how to zoom in your code editor of choice.</p>
+        </ul>
+        <p>Remember that it's a conversation and there will be many questions. It is better to say "I don't know" than to answer incorrectly.</p><br>
+        <h2>Demo your exam project (First 5-6 minutes)</h2>
+        <p>Demo means no code but constantly showing features. A feature in the context to demoing is everything a user can do with your system / website.</p>
+        <p>It’s not a pitch, it’s a demo. The UI and UX should be so well made that the website doesn’t require explanations and any users should be able to see the design and flow and understand what it’s about.</p>
+        <p><b>NEVER</b> show how to log in or sign up. The exception is if you've implemented additional features beyond the Mandatory II requirements (e.g. a forgot password feature).</p>
+        <p><b>Info:</b> I might seem impatient during the demo part but it’s because I use the measured time it takes to demo unique features of the system to place you in a grade category. Expect me to instruct you if the demo sidetracks or is slowed down by explanations. If talking during the demo part means not showcasing features then a silent demo is preferred. The goal is not to create a stressful exam but for me to create an objective measurement to the grading system.</p><br>
+        <h2>Discussion</h2>
+        <p>We will talk about your exam project. Code and more.</p><br>
+        <h2>Live Coding</h2>
+        <p>You will be asked to live code! Either right away if I notice some things about your project or in the end.</p>
+        <p>You are not allowed to use snippets or code assisting tools (Copilot etc.) during the exam. IntelliSense is allowed.</p>
+    </section>
+
+    <section id="view-about" class="view">
+        <h1>About</h1>
+        <table id="anime-table">
+            <thead>
+                <tr>
+                    <th>Fulde Navn</th>
+                    <th>KEA-mail</th>
+                     <th>github link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td>Martin Sven Poulsen</td>
+                <td>mapou0004@stud.kea.dk</td>
+                <td>https://github.com/Mapo0004StudKea/Node.js_Exam_Project</td>
+            </tbody>
+        </table><br>
+        <h2>Beskrivelse</h2>
+        <p>Har lavet et projekt efter minimums krav.</p><br>
+        <p><b>Backend:</b></p>
+        <ul>
+            <li>Bruger express.</li>
+            <li>Tilknyttet MySQL database.</li>
+            <li>Bruger socket, har lavet en simpel live chat.</li>
+            <li>til authentication bruger jeg bcrypt.</li>
+            <li>til authorization bruger jeg sessions.</li>
+        </ul><br>
+        <p>Frontend:</p>
+        <ul>
+            <li>Plain HTML og CSS</li>
+            <li>Bruger fetch til kald af endpoints i backend.</li>
+            <li>Sockets til live chatten.</li>
+            <li>Bruger bcrypt og sessions til authentication og authorization.</li>
+        </ul><br>
+        <p>Har brugt ESLint til at få pænere kode og rette fejl.</p>
+        <p>Har lavet noget simpel styling.</p><br>
+        <p>Har ikke hostet projektet.</p>
+    </section>
 
     <section id="view-anime" class="view hidden">
         <h1>Anime Administration</h1>

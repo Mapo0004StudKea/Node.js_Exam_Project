@@ -4,6 +4,7 @@ import { fetchAndDisplayAnime } from './anime.js';
 
 export const views = {
     '/': document.getElementById('view-home'),
+    '/about':document.getElementById('view-about'),
     '/anime': document.getElementById('view-anime'),
     '/login': document.getElementById('view-login'),
     '/signup': document.getElementById('view-signup'),
