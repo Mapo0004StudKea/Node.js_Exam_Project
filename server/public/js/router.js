@@ -1,13 +1,14 @@
 import { checkSession } from './session.js';
 import { fetchAndDisplayUsers } from './admin.js';
+import { fetchAndDisplayAnime } from './anime.js';
 
 export const views = {
     '/': document.getElementById('view-home'),
-    '/about': document.getElementById('view-about'),
+    '/anime': document.getElementById('view-anime'),
     '/login': document.getElementById('view-login'),
     '/signup': document.getElementById('view-signup'),
     '/dashboard': document.getElementById('view-dashboard'),
-    '/admin': document.getElementById('view-admin') 
+    '/admin': document.getElementById('view-admin')
 };
 
 export function showRoute(route) {
@@ -19,6 +20,8 @@ export function showRoute(route) {
         checkSession();
     } else if (route === '/admin') {
         fetchAndDisplayUsers(); 
+    } else if (route === '/anime') {
+        fetchAndDisplayAnime();
     }
 }
 

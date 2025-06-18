@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>SPA Exam Project</title>
+    <title>Exam Project</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" type="image/ico" href="/images/favicon.ico" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -11,10 +11,10 @@
 </head>
 <body>
     <header>
-        <div class="logo">SPA Exam Project</div>
+        <div class="logo">Exam Project</div>
         <nav>
             <a href="#/">Home</a>
-            <a href="#/about">About</a>
+            <a href="#/anime">Anime</a>
             <a href="#/dashboard">Dashboard</a>
             <a href="#/admin">Admin</a> <a href="#/login">Sign In</a>
             <a href="#/signup">Sign Up</a>
@@ -24,9 +24,68 @@
     <main>
     <section id="view-home" class="view"> <h1>Welcome to Home</h1> </section>
 
-    <section id="view-about" class="view hidden">
-        <h1>About this project</h1>
-        <p>SPA with Vanilla JS auth.</p>
+    <section id="view-anime" class="view hidden">
+        <h1>Anime Administration</h1>
+
+        <h2>Upload Anime CSV</h2>
+        <form id="anime-upload-form" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" />
+            <button class="btn-orange" type="submit">Upload CSV</button>
+        </form>
+
+        <h2>Create New Anime</h2>
+        <div class="anime-form-container">
+            <input type="text" id="anime-create-title" placeholder="Title" />
+            <input type="text" id="anime-create-genre" placeholder="Genre" />
+            <input type="text" id="anime-create-opinion" placeholder="Opinion" />
+            <input type="text" id="anime-create-watch-again" placeholder="Watch Again (yes/no/maybe)" />
+            <input type="number" id="anime-create-times-watched" placeholder="Times Watched" />
+            <input type="text" id="anime-create-released" placeholder="Released Year" />
+            <input type="text" id="anime-create-sub-dub" placeholder="Sub/Dub" />
+            <button class="btn-orange" id="anime-create-btn">Create Anime</button>
+        </div>
+
+        <h2>Edit Anime</h2>
+        <div class="anime-form-container">
+            <input type="text" id="anime-edit-title" placeholder="New Title" />
+            <input type="text" id="anime-edit-genre" placeholder="New Genre" />
+            <input type="text" id="anime-edit-opinion" placeholder="New Opinion" />
+            <input type="text" id="anime-edit-watch-again" placeholder="Watch Again (yes/no/maybe)" />
+            <input type="number" id="anime-edit-times-watched" placeholder="Times Watched" />
+            <input type="text" id="anime-edit-released" placeholder="Released Year" />
+            <input type="text" id="anime-edit-sub-dub" placeholder="Sub/Dub" />
+            <button class="btn-orange" id="anime-edit-btn">Save Changes</button>
+            <button class="btn-gray" id="anime-clear-btn">clear</button>
+        </div>
+
+        <h2>Anime List</h2>
+        <input type="text" id="anime-search" placeholder="Search by title..." />
+        <table id="anime-table">
+            <thead>
+            <tr>
+                <th data-key="id">ID</th>
+                <th data-key="title">Title</th>
+                <th data-key="genre">Genre</th>
+                <th data-key="opinion">Opinion</th>
+                <th data-key="watch_again">Watch Again</th>
+                <th data-key="times_watched">Times Watched</th>
+                <th data-key="released">Released</th>
+                <th data-key="sub_dub">Sub/Dub</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="pagination">
+            <button id="anime-first" class="btn-orange">First</button>
+            <button id="anime-prev" class="btn-gray">Previous</button>
+            <span id="anime-page">Page 1 of ?</span>
+            <button id="anime-next" class="btn-gray">Next</button>
+            <button id="anime-last" class="btn-orange">Last</button>
+            <input type="number" id="anime-page-input" min="1" style="width: 60px;" placeholder="Go to" />
+            <button id="anime-go-btn" class="btn-orange">Go</button>
+        </div>
     </section>
 
     <section id="view-dashboard" class="view hidden">
@@ -103,7 +162,7 @@
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/theme.js"></script>
     <script type="module" src="js/admin.js"></script> <footer>
-        <p>© 2025 SPA Exam Project</p>
+    <p>© 2025 SPA Exam Project</p>
     </footer>
 </body>
 </html>

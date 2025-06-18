@@ -6,3 +6,15 @@ CREATE TABLE IF NOT EXISTS users (
     roles VARCHAR(255) DEFAULT "user",
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+DROP TABLE IF EXISTs anime;
+CREATE TABLE IF NOT EXISTS anime (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    genre VARCHAR(255),
+    opinion VARCHAR(255),
+    watch_again VARCHAR(255),
+    times_watched VARCHAR(255),
+    released VARCHAR(255),
+    sub_dub VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

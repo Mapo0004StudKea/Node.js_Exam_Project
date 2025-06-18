@@ -10,6 +10,7 @@ import connection from './database/connection.js';
 import userRoutes from './routers/users.js';
 import authRouter from './routers/authRouter.js';
 import meRouter from './routers/meRouter.js';
+import animeRouter from './routers/animeRouter.js';
 import { setupMailer } from './mail/mailer.js';
 
 // Initier Express og http-server
@@ -48,19 +49,24 @@ io.on('connection', (socket) => {
 // Routes
 app.use(authRouter);
 app.use(userRoutes);
+app.use(animeRouter);
 app.use(meRouter);
 
 // Opsætning (Mailer, Database)
 await setupMailer();
 
-const schema = fs.readFileSync('./database/schema.sql', 'utf8');
-connection.query(schema, (err) => {
-  if (err) {
+const queries = fs.readFileSync('./database/schema.sql', 'utf8')
+  .split(';')
+  .filter(query => query.trim().length > 0);
+
+for (const query of queries) {
+  try {
+    await connection.query(query);
+    console.log('Tabel oprettet.');
+  } catch (err) {
     console.error('Database setup fejl:', err);
-  } else {
-    console.log('Database schema kørt.');
   }
-});
+}
 
 // Start server
 const PORT = process.env.PORT || 8080;
