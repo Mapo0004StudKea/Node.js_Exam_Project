@@ -1,7 +1,13 @@
 // anime.js
+import { clearCreateForm, clearEditForm } from './util.js';
+
 let allAnime = [];
 let currentPage = 1;
-const itemsPerPage = 15;
+const itemsPerPage = 30;
+let selectedAnimeId = null;
+let currentSortKey = null;
+let sortAscending = true;
+let searchTerm = '';
 
 export async function fetchAndDisplayAnime() {
   try {
@@ -17,17 +23,61 @@ export async function fetchAndDisplayAnime() {
   }
 }
 
+document.querySelectorAll('#anime-table thead th[data-key]').forEach(th => {
+  th.style.cursor = 'pointer';
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (currentSortKey === key) {
+      sortAscending = !sortAscending; // Toggle sort direction
+    } else {
+      currentSortKey = key;
+      sortAscending = true;
+    }
+    sortAnime();
+    renderAnimeTable();
+  });
+});
+
+function sortAnime() {
+  if (!currentSortKey) return;
+
+  allAnime.sort((a, b) => {
+    const valA = a[currentSortKey] ?? '';
+    const valB = b[currentSortKey] ?? '';
+
+    if (typeof valA === 'number' && typeof valB === 'number') {
+      return sortAscending ? valA - valB : valB - valA;
+    }
+
+    return sortAscending
+      ? String(valA).localeCompare(String(valB))
+      : String(valB).localeCompare(String(valA));
+  });
+}
+
+document.getElementById('anime-search').addEventListener('input', (e) => {
+  searchTerm = e.target.value.toLowerCase();
+  currentPage = 1;
+  renderAnimeTable();
+});
+
 function renderAnimeTable() {
   const tableBody = document.querySelector('#anime-table tbody');
   tableBody.innerHTML = '';
 
+  let filteredAnime = allAnime.filter(a =>
+    {return a.title?.toLowerCase().includes(searchTerm)}
+  );
+
+  const maxPage = Math.ceil(filteredAnime.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  const pageItems = allAnime.slice(start, end);
+  const pageItems = filteredAnime.slice(start, end);
 
   for (const anime of pageItems) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
+      <td>${anime.id}</td>
       <td>${anime.title}</td>
       <td>${anime.genre}</td>
       <td>${anime.opinion}</td>
@@ -43,21 +93,45 @@ function renderAnimeTable() {
     tableBody.appendChild(tr);
   }
 
-  document.getElementById('anime-page').textContent = `Page ${currentPage}`;
+  document.getElementById('anime-page').textContent = `Page ${currentPage} of ${maxPage}`;
 }
 
 // Pagination
+document.getElementById('anime-first').addEventListener('click', () => {
+  currentPage = 1;
+  renderAnimeTable();
+});
+
+document.getElementById('anime-last').addEventListener('click', () => {
+  currentPage = Math.ceil(allAnime.length / itemsPerPage);
+  renderAnimeTable();
+});
+
 document.getElementById('anime-prev').addEventListener('click', () => {
   if (currentPage > 1) {
     currentPage--;
     renderAnimeTable();
   }
 });
+
 document.getElementById('anime-next').addEventListener('click', () => {
   const maxPage = Math.ceil(allAnime.length / itemsPerPage);
   if (currentPage < maxPage) {
     currentPage++;
     renderAnimeTable();
+  }
+});
+
+document.getElementById('anime-go-btn').addEventListener('click', () => {
+  const input = document.getElementById('anime-page-input');
+  const page = parseInt(input.value, 10);
+  const maxPage = Math.ceil(allAnime.length / itemsPerPage);
+
+  if (!isNaN(page) && page >= 1 && page <= maxPage) {
+    currentPage = page;
+    renderAnimeTable();
+  } else {
+    toastr.warning(`Please enter a valid page number (1 - ${maxPage})`);
   }
 });
 
@@ -98,7 +172,7 @@ document.getElementById('anime-create-btn').addEventListener('click', async () =
     if (!res.ok) throw new Error('Failed to create anime');
 
     toastr.success('Anime created!');
-    await fetchAndDisplayAnime(); // Refresh list
+    await fetchAndDisplayAnime(); // Refresher listen
     clearCreateForm();
   } catch (err) {
     console.error(err);
@@ -106,22 +180,77 @@ document.getElementById('anime-create-btn').addEventListener('click', async () =
   }
 });
 
-function clearCreateForm() {
-  document.getElementById('anime-create-title').value = '';
-  document.getElementById('anime-create-genre').value = '';
-  document.getElementById('anime-create-opinion').value = '';
-  document.getElementById('anime-create-watch-again').value = '';
-  document.getElementById('anime-create-times-watched').value = '';
-  document.getElementById('anime-create-released').value = '';
-  document.getElementById('anime-create-sub-dub').value = '';
-}
+// Edit-knap: Udfylder felterne
+document.querySelector('#anime-table').addEventListener('click', (e) => {
+  if (e.target.classList.contains('edit-anime')) {
+    const id = e.target.dataset.id;
+    selectedAnimeId = id; // <-- gem id globalt
+    const anime = allAnime.find(a => {return a.id == id});
+    if (!anime) return;
+
+    document.getElementById('anime-edit-title').value = anime.title || '';
+    document.getElementById('anime-edit-genre').value = anime.genre || '';
+    document.getElementById('anime-edit-opinion').value = anime.opinion || '';
+    document.getElementById('anime-edit-watch-again').value = anime.watch_again || '';
+    document.getElementById('anime-edit-times-watched').value = anime.times_watched || '';
+    document.getElementById('anime-edit-released').value = anime.released || '';
+    document.getElementById('anime-edit-sub-dub').value = anime.sub_dub || '';
+  }
+});
+
+// Gem ændringer
+document.getElementById('anime-edit-btn').addEventListener('click', async () => {
+  const title = document.getElementById('anime-edit-title').value.trim();
+  const genre = document.getElementById('anime-edit-genre').value.trim();
+  const opinion = document.getElementById('anime-edit-opinion').value.trim();
+  const watch_again = document.getElementById('anime-edit-watch-again').value.trim();
+  const times_watched = document.getElementById('anime-edit-times-watched').value.trim();
+  const released = document.getElementById('anime-edit-released').value.trim();
+  const sub_dub = document.getElementById('anime-edit-sub-dub').value.trim();
+
+  if (!title || !genre) {
+    toastr.warning('title and genre are required');
+    return;
+  }
+
+  const updatedAnime = {
+    title,
+    genre,
+    opinion,
+    watch_again,
+    times_watched,
+    released,
+    sub_dub
+  };
+
+  try {
+    const res = await fetch(`/anime/${selectedAnimeId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedAnime)
+    });
+
+    if (!res.ok) throw new Error('Failed to update anime');
+
+    toastr.success('Anime updated!');
+    await fetchAndDisplayAnime();
+    clearEditForm();
+  } catch (err) {
+    console.error(err);
+    toastr.error('Error updating anime');
+  }
+});
+
+document.getElementById('anime-clear-btn').addEventListener('click', () => {
+  clearEditForm();
+});
 
 // Delete Anime
 document.querySelector('#anime-table').addEventListener('click', async (e) => {
   if (e.target.classList.contains('delete-anime')) {
     const id = e.target.dataset.id;
-
-    if (!confirm('Are you sure you want to delete this anime?')) return;
 
     try {
       const res = await fetch(`/anime/${id}`, {
@@ -168,4 +297,3 @@ document.getElementById('anime-upload-form').addEventListener('submit', async (e
     toastr.error('Error uploading CSV');
   }
 });
-
