@@ -62,7 +62,7 @@ const queries = fs.readFileSync('./database/schema.sql', 'utf8')
 for (const query of queries) {
   try {
     await connection.query(query);
-    console.log('Tabel oprettet.');
+    //console.log('Tabel oprettet.');
   } catch (err) {
     console.error('Database setup fejl:', err);
   }
